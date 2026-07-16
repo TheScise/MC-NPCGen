@@ -1,1 +1,20 @@
-["Human", "Elf", "Dwarf", "Orc", "Goblin", "Zombie", "Villager", "Piglin"]
+[
+  "Human",
+  "Elf",
+  "Dwarf",
+  "Orc",
+  "Goblin",
+  "Zombie",
+  "Villager",
+  "Piglin",
+  "Skeleton",
+  "Enderman",
+  "Vex",
+  "Allay",
+  "Witch",
+  "Illager",
+  "Strider",
+  "Drowned",
+  "Phantom",
+  "Golem"
+]

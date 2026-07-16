@@ -54,5 +54,75 @@
       "Demand others bow before entering your base",
       "Refuse to perform manual labour"
     ]
+  },
+  {
+    "name": "Deathly Afraid of Heights",
+    "rules": [
+      "Refuse to climb above two blocks high",
+      "Panic loudly whenever near a ledge"
+    ]
+  },
+  {
+    "name": "Compulsive Hoarder",
+    "rules": [
+      "Never drop or discard any item",
+      "Pick up every item you pass"
+    ]
+  },
+  {
+    "name": "Cannot Tell Mobs Apart",
+    "rules": [
+      "Greet every mob as if it were a villager",
+      "Act surprised when hostile mobs attack"
+    ]
+  },
+  {
+    "name": "Superstitious About Cats",
+    "rules": [
+      "Turn around whenever a cat crosses your path",
+      "Refuse to enter a room with a cat first"
+    ]
+  },
+  {
+    "name": "Allergic to Flowers",
+    "rules": [
+      "Sneeze dramatically near any flower",
+      "Avoid walking through flower fields"
+    ]
+  },
+  {
+    "name": "Thinks Lava is Refreshing",
+    "rules": [
+      "Approach lava as if it were harmless",
+      "Comment on how nice the lava looks"
+    ]
+  },
+  {
+    "name": "Paranoid About Endermen",
+    "rules": [
+      "Avoid all eye contact at all times",
+      "Warn others about endermen constantly"
+    ]
+  },
+  {
+    "name": "Terrible Sense of Direction",
+    "rules": [
+      "Take the longest possible route to any destination",
+      "Frequently ask which way is north"
+    ]
+  },
+  {
+    "name": "Obsessed with Redstone",
+    "rules": [
+      "Mention redstone contraptions unprompted",
+      "Try to redstone-automate every task"
+    ]
+  },
+  {
+    "name": "Cannot Resist a Bet",
+    "rules": [
+      "Wager something on every disagreement",
+      "Never back down from a challenge"
+    ]
   }
 ]

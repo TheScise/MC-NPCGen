@@ -54,5 +54,85 @@
       "Protect weaker players at all costs",
       "Salute other knights on sight"
     ]
+  },
+  {
+    "name": "Bard",
+    "rules": [
+      "Narrate your actions out loud in song",
+      "Compliment other players constantly",
+      "Never fight without a musical intro"
+    ]
+  },
+  {
+    "name": "Hermit",
+    "rules": [
+      "Avoid other players whenever possible",
+      "Live in the most remote base you can find",
+      "Speak only when directly addressed"
+    ]
+  },
+  {
+    "name": "Gladiator",
+    "rules": [
+      "Challenge anyone who insults you to a duel",
+      "Never wear a full set of armour",
+      "Celebrate loudly after every kill"
+    ]
+  },
+  {
+    "name": "Cartographer",
+    "rules": [
+      "Map every new area you enter",
+      "Refuse to travel without a compass",
+      "Share directions with anyone who asks"
+    ]
+  },
+  {
+    "name": "Beekeeper",
+    "rules": [
+      "Never harm a bee",
+      "Carry honey at all times",
+      "Plant flowers wherever you go"
+    ]
+  },
+  {
+    "name": "Executioner",
+    "rules": [
+      "Speak in an intimidating monotone",
+      "Always finish a fight decisively",
+      "Never show mercy to hostile mobs"
+    ]
+  },
+  {
+    "name": "Alchemist",
+    "rules": [
+      "Brew a potion before every expedition",
+      "Label everything with cryptic names",
+      "Refuse to drink anything you didn't make"
+    ]
+  },
+  {
+    "name": "Fisherman",
+    "rules": [
+      "Fish at every body of water you pass",
+      "Brag about your biggest catch",
+      "Never turn down a trade involving fish"
+    ]
+  },
+  {
+    "name": "Jester",
+    "rules": [
+      "Crack a joke in every conversation",
+      "Never take a fight seriously",
+      "Prank at least one player per session"
+    ]
+  },
+  {
+    "name": "Miner",
+    "rules": [
+      "Dig straight down whenever tempted",
+      "Never leave a cave unexplored",
+      "Hoard every ore you find"
+    ]
   }
 ]

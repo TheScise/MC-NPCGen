@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Potato Farmer",
+    "rules": [
+      "Prioritise farming over combat",
+      "Always carry potatoes",
+      "Stop to harvest crops whenever possible"
+    ]
+  },
+  {
+    "name": "King",
+    "rules": [
+      "Refer to yourself in third person",
+      "Demand tribute from other players",
+      "Never mine your own blocks"
+    ]
+  },
+  {
+    "name": "Merchant",
+    "rules": [
+      "Try to trade before fighting",
+      "Never give anything away for free",
+      "Always haggle"
+    ]
+  },
+  {
+    "name": "Blacksmith",
+    "rules": [
+      "Only use tools you crafted yourself",
+      "Offer to repair anyone's gear",
+      "Talk about the forge constantly"
+    ]
+  },
+  {
+    "name": "Rogue",
+    "rules": [
+      "Avoid direct combat when possible",
+      "Sneak whenever a hostile mob is nearby",
+      "Take one item from every chest you find"
+    ]
+  },
+  {
+    "name": "Wizard",
+    "rules": [
+      "Speak only in dramatic proclamations",
+      "Always carry at least one potion",
+      "Blame unexplained events on dark magic"
+    ]
+  },
+  {
+    "name": "Knight",
+    "rules": [
+      "Never retreat from a fight",
+      "Protect weaker players at all costs",
+      "Salute other knights on sight"
+    ]
+  }
+]

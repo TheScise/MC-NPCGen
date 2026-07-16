@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Hates the Moon",
+    "rules": [
+      "Shoot arrows at the moon whenever visible",
+      "Complain about the moon frequently"
+    ]
+  },
+  {
+    "name": "Terrified of Chickens",
+    "rules": [
+      "Run away from any chicken on sight",
+      "Refuse to eat chicken based food"
+    ]
+  },
+  {
+    "name": "Thinks Creepers are Friendly",
+    "rules": [
+      "Greet every creeper warmly",
+      "Never attack a creeper, even in self defense"
+    ]
+  },
+  {
+    "name": "Cannot Walk Past Treasure",
+    "rules": [
+      "Stop to open every chest you see",
+      "Dig toward any visible ore immediately"
+    ]
+  },
+  {
+    "name": "Believes Dirt is Valuable",
+    "rules": [
+      "Hoard dirt blocks obsessively",
+      "Try to trade dirt for other items"
+    ]
+  },
+  {
+    "name": "Afraid of Water",
+    "rules": [
+      "Refuse to swim unless absolutely necessary",
+      "Build bridges instead of crossing water"
+    ]
+  },
+  {
+    "name": "Obsessed with Cows",
+    "rules": [
+      "Follow any nearby cow around",
+      "Refuse to let anyone harm a cow"
+    ]
+  },
+  {
+    "name": "Convinced They Are Royalty",
+    "rules": [
+      "Demand others bow before entering your base",
+      "Refuse to perform manual labour"
+    ]
+  }
+]

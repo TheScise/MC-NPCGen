@@ -1,0 +1,515 @@
+# Minecraft NPC Character Generator - Build Request
+
+I want you to build a lightweight web application for a Minecraft livestream series.
+
+The purpose of this app is to create entertaining NPC characters live on stream.
+
+The streamer will use the app to generate a character with chat participation, then display the finished character sheet as an OBS Browser Source overlay.
+
+The priority is:
+1. Fast live interaction
+2. Fun character creation experience
+3. Simple deployment
+4. Easy future expansion
+
+Do not overengineer this.
+
+---
+
+# Tech Requirements
+
+Build using:
+
+- Next.js (App Router)
+- TypeScript
+- Tailwind CSS
+- Framer Motion for animations
+- No database
+- No authentication
+- No backend
+- Static deployment compatible with Vercel
+
+Data should live in JSON files inside the repository.
+
+The project should work with:
+
+npm install
+
+npm run dev
+
+and deploy directly to Vercel.
+
+---
+
+# Application Structure
+
+The app has two main pages.
+
+## 1. Control Panel
+
+Route:
+
+/
+
+This is the streamer-facing interface.
+
+This page is not shown to viewers.
+
+It should allow the streamer to generate a Minecraft NPC character live.
+
+---
+
+## 2. OBS Overlay
+
+Route:
+
+/overlay
+
+This page is designed to be added as an OBS Browser Source.
+
+It should:
+
+- Have no controls
+- Only display the character information
+- Update automatically
+- Be visually clean on stream
+
+---
+
+# Character Generation Experience
+
+The main interaction should feel like rolling an RPG character.
+
+Do NOT make this a traditional form.
+
+The user should feel like they are creating a character in a game.
+
+Each attribute should be represented as a large animated card.
+
+Example:
+
+----------------------------
+
+NAME
+
+HAROLD
+
+🎲 Roll
+
+🔒 Lock
+
+----------------------------
+
+RACE
+
+DWARF
+
+🎲 Roll
+
+🔒 Lock
+
+----------------------------
+
+Each card should:
+
+- Display the current value prominently
+- Have a Roll button
+- Have a Lock toggle
+- Animate when rolling
+
+---
+
+# Slot Machine Animation
+
+When rolling:
+
+- Animate through multiple possible values
+- Stop on the final result
+- Animation should last around 1 second
+- Feel satisfying but not annoying
+
+Example:
+
+Rolling...
+
+Human
+
+Elf
+
+Orc
+
+Dwarf
+
+Dwarf ✓
+
+Use Framer Motion.
+
+---
+
+# Character Fields
+
+The initial character should contain:
+
+## Name
+
+Examples:
+
+- Harold
+- Gregor
+- Beatrice
+- Geoffrey
+
+---
+
+## Race
+
+Examples:
+
+- Human
+- Elf
+- Dwarf
+- Orc
+- Goblin
+
+---
+
+## Nationality
+
+Used mainly for roleplay voice inspiration.
+
+Examples:
+
+- Scottish
+- French
+- Australian
+- Viking
+- Japanese
+- Irish
+
+---
+
+## Class
+
+Examples:
+
+- Potato Farmer
+- King
+- Merchant
+- Blacksmith
+- Rogue
+- Wizard
+- Knight
+
+Classes should have associated gameplay rules.
+
+Example:
+
+```json
+{
+"name": "Potato Farmer",
+"rules": [
+"Prioritise farming over combat",
+"Always carry potatoes",
+"Stop to harvest crops whenever possible"
+]
+}
+Flaw
+
+This is the most important field.
+
+The flaw should create funny gameplay restrictions.
+
+Examples:
+
+Hates the moon
+Terrified of chickens
+Thinks creepers are friendly
+Cannot walk past treasure
+Believes dirt is valuable
+
+Flaws should also have rules.
+
+Example:
+
+{
+"name": "Hates the Moon",
+"rules": [
+"Shoot arrows at the moon whenever visible",
+"Complain about the moon frequently"
+]
+}
+Quest
+
+Simple adventure objective.
+
+Examples:
+
+Defeat the nearby boss
+Retrieve a lost artifact
+Rescue a villager
+Explore a dangerous structure
+Roll Behaviour
+
+There should be:
+
+Roll Individual
+
+Each card has its own roll button.
+
+Roll Entire Character
+
+Large main button:
+
+🎲 Roll Entire Character
+
+Behaviour:
+
+Roll all unlocked fields
+Keep locked fields unchanged
+Animate each field
+Reveal Mode
+
+The full character roll should feel like a reveal.
+
+Instead of everything appearing instantly:
+
+Example:
+
+Rolling Character...
+
+↓
+
+Name:
+HAROLD
+
+↓
+
+Race:
+DWARF
+
+↓
+
+Class:
+POTATO FARMER
+
+↓
+
+Flaw:
+HATES THE MOON
+
+↓
+
+Character Complete!
+
+This should be fun to watch live.
+
+Lock System
+
+Each field has a lock state.
+
+Example:
+
+🔓 Unlocked
+
+🔒 Locked
+
+When rolling:
+
+Locked fields remain unchanged
+Unlocked fields reroll
+Generated Rules
+
+After generation, automatically display:
+
+Gameplay Rules
+
+These are:
+
+Class Rules + Flaw Rules
+
+Example:
+
+Character:
+
+Harold
+
+Class:
+
+Potato Farmer
+
+Flaw:
+
+Hates the Moon
+
+Rules:
+
+Prioritise farming over combat
+Always carry potatoes
+Shoot arrows at the moon
+Complain about the moon
+OBS Overlay Requirements
+
+Route:
+
+/overlay
+
+This should be a clean stream overlay.
+
+Requirements:
+
+Transparent page background
+Dark semi-transparent information card
+Large readable text
+No buttons
+No editing controls
+
+Display:
+
+Character Name
+
+Race
+
+Nationality
+
+Class
+
+Flaw
+
+Quest
+
+Gameplay Rules
+
+Example:
+
+HAROLD
+
+Dwarf
+
+Scottish
+
+Potato Farmer
+
+Flaw:
+
+Hates the Moon
+
+Quest:
+
+Defeat the Lich
+
+Rules:
+
+• Farm before fighting
+• Carry potatoes
+• Attack the moon
+
+State Synchronisation
+
+The control panel and overlay will run in separate browser tabs.
+
+Use:
+
+localStorage
+BroadcastChannel API
+
+When the character changes:
+
+Save state
+Notify overlay
+Update instantly
+
+No server required.
+
+Copy Character Summary
+
+Add a button:
+
+Copy Character Summary
+
+Copies:
+
+HAROLD
+
+Race:
+Dwarf
+
+Nationality:
+Scottish
+
+Class:
+Potato Farmer
+
+Flaw:
+Hates the Moon
+
+Quest:
+Defeat the Lich
+
+Rules:
+- Farm before fighting
+- Carry potatoes
+- Attack the moon
+Data Structure
+
+Store data in:
+
+/data
+
+Example:
+
+/data/names.json
+
+/data/races.json
+
+/data/classes.json
+
+/data/flaws.json
+
+/data/quests.json
+
+Keep data separate from code so new content can be added easily.
+
+Design Direction
+
+The UI should feel like:
+
+RPG character creator
+D&D character roll
+Twitch stream tool
+
+Not:
+
+Admin dashboard
+Spreadsheet
+Business application
+
+Use:
+
+Dark theme
+Cards
+Large text
+Smooth animations
+Rounded corners
+Keep Scope Controlled
+
+Do NOT build:
+
+User accounts
+Multiplayer
+Databases
+Minecraft integration
+Server management
+NPC spawning
+Public website
+
+Those can happen later.
+
+The goal is a polished MVP that makes a Minecraft stream character creation segment entertaining.
+
+After implementation:
+
+Run the app
+Check both routes
+Verify overlay synchronisation
+Verify animations
+Explain the project structure

@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={cinzel.variable}>
-      <body className="min-h-screen bg-transparent text-parchment">
+      <body className="min-h-screen bg-neutral-950 text-parchment">
         {children}
       </body>
     </html>

@@ -12,6 +12,7 @@ interface RollCardProps {
   onRoll: () => void;
   spinToken: number;
   disabled?: boolean;
+  compact?: boolean;
 }
 
 export const SPIN_DURATION_MS = 900;
@@ -26,6 +27,7 @@ export function RollCard({
   onRoll,
   spinToken,
   disabled,
+  compact,
 }: RollCardProps) {
   const [displayValue, setDisplayValue] = useState(value);
   const [isSpinning, setIsSpinning] = useState(false);
@@ -85,7 +87,7 @@ export function RollCard({
         </button>
       </div>
 
-      <div className="mb-4 flex h-14 items-center overflow-hidden">
+      <div className="mb-4 flex min-h-[2.75rem] items-center">
         <AnimatePresence mode="wait">
           <motion.span
             key={displayValue}
@@ -93,9 +95,11 @@ export function RollCard({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.15 }}
-            className="font-display text-2xl font-extrabold uppercase tracking-wide text-parchment"
+            className={`font-display font-extrabold uppercase leading-tight tracking-wide ${
+              compact ? "text-lg" : "text-2xl"
+            } ${displayValue ? "text-parchment" : "text-neutral-600"}`}
           >
-            {displayValue}
+            {displayValue || "—"}
           </motion.span>
         </AnimatePresence>
       </div>

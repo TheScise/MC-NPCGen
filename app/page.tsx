@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { RollCard, SPIN_DURATION_MS } from "@/components/RollCard";
 import { RulesPanel } from "@/components/RulesPanel";
 import {
+  emptyCharacter,
   fieldOptions,
-  generateCharacter,
   rollField,
   rulesFor,
 } from "@/lib/generate";
@@ -31,7 +31,7 @@ const FIELD_ORDER: { key: FieldKey; label: string }[] = [
 const STAGGER_MS = 350;
 
 export default function ControlPanel() {
-  const [character, setCharacter] = usePublishedCharacter(generateCharacter);
+  const [character, setCharacter] = usePublishedCharacter(() => emptyCharacter);
   const [locks, setLocks] = useState<LockState>(defaultLocks);
   const [spinTokens, setSpinTokens] = useState<Record<FieldKey, number>>({
     name: 0,
@@ -101,6 +101,12 @@ export default function ControlPanel() {
     setTimeout(() => setCopyLabel("Copy Character Summary"), 1500);
   }
 
+  function clearCharacter() {
+    setRevealStatus(null);
+    setLocks(defaultLocks);
+    setCharacter(emptyCharacter);
+  }
+
   if (!character) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-neutral-950">
@@ -110,6 +116,8 @@ export default function ControlPanel() {
       </main>
     );
   }
+
+  const isEmpty = character.name === "";
 
   return (
     <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 bg-neutral-950 px-6 py-10">
@@ -149,7 +157,7 @@ export default function ControlPanel() {
         </div>
       </div>
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {FIELD_ORDER.map((f) => (
           <RollCard
             key={f.key}
@@ -161,19 +169,29 @@ export default function ControlPanel() {
             onRoll={() => rollSingleField(f.key)}
             spinToken={spinTokens[f.key]}
             disabled={!!revealStatus}
+            compact={f.key === "flawName" || f.key === "quest"}
           />
         ))}
       </section>
 
       <RulesPanel rules={character.rules} />
 
-      <div className="flex justify-center pb-6">
+      <div className="flex justify-center gap-3 pb-6">
         <button
           type="button"
           onClick={copySummary}
-          className="rounded-xl border-2 border-neutral-700 bg-neutral-900 px-6 py-3 text-sm font-bold uppercase tracking-wide text-parchment transition hover:border-ember hover:text-ember"
+          disabled={isEmpty}
+          className="rounded-xl border-2 border-neutral-700 bg-neutral-900 px-6 py-3 text-sm font-bold uppercase tracking-wide text-parchment transition hover:border-ember hover:text-ember disabled:cursor-not-allowed disabled:opacity-50"
         >
           📋 {copyLabel}
+        </button>
+        <button
+          type="button"
+          onClick={clearCharacter}
+          disabled={isEmpty}
+          className="rounded-xl border-2 border-neutral-700 bg-neutral-900 px-6 py-3 text-sm font-bold uppercase tracking-wide text-parchment transition hover:border-red-400 hover:text-red-400 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          🗑️ Clear
         </button>
       </div>
     </main>

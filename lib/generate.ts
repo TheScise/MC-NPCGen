@@ -36,6 +36,16 @@ export function rulesFor(className: string, flawName: string): string[] {
   return [...classRules, ...flawRules];
 }
 
+export const emptyCharacter: Character = {
+  name: "",
+  race: "",
+  nationality: "",
+  className: "",
+  flawName: "",
+  quest: "",
+  rules: [],
+};
+
 export function generateCharacter(): Character {
   const className = rollField("className");
   const flawName = rollField("flawName");

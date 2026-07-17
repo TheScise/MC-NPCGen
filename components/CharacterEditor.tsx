@@ -1,5 +1,12 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import classesData from "@/data/classes.json";
+import flawsData from "@/data/flaws.json";
+import nationalitiesData from "@/data/nationalities.json";
+import questsData from "@/data/quests.json";
+import racesData from "@/data/races.json";
+import { resolveList, resolveRules } from "@/lib/customOptions";
 import { Character } from "@/lib/types";
 
 interface CharacterEditorProps {
@@ -36,8 +43,81 @@ export function CharacterEditor({
   onClose,
   justSaved,
 }: CharacterEditorProps) {
+  // Options are read from localStorage, so start empty and fill in after mount
+  // to keep server/client markup in sync.
+  const [options, setOptions] = useState<Record<string, string[]>>({});
+  const [freeTextFields, setFreeTextFields] = useState<Set<keyof Character>>(
+    new Set()
+  );
+
+  useEffect(() => {
+    setOptions({
+      race: resolveList("races", racesData),
+      nationality: resolveList("nationalities", nationalitiesData),
+      quest: resolveList("quests", questsData),
+      className: resolveRules("classes", classesData).map((r) => r.name),
+      flawName: resolveRules("flaws", flawsData).map((r) => r.name),
+    });
+  }, []);
+
   function setField(key: keyof Character, value: string) {
     onChange({ ...character, [key]: value } as Character);
+  }
+
+  function toggleFreeText(key: keyof Character) {
+    setFreeTextFields((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  }
+
+  function renderField(f: { key: keyof Character; label: string }) {
+    const fieldOptions = options[f.key];
+    const value = textValue(character, f.key);
+    const isFreeText = freeTextFields.has(f.key) || !fieldOptions;
+
+    return (
+      <label key={f.key} className="block">
+        <span className="mb-1 flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-neutral-400">
+          {f.label}
+          {fieldOptions && (
+            <button
+              type="button"
+              onClick={() => toggleFreeText(f.key)}
+              title={isFreeText ? "Switch to dropdown" : "Type a custom value"}
+              className="text-neutral-500 transition hover:text-ember"
+            >
+              ✎
+            </button>
+          )}
+        </span>
+        {isFreeText ? (
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => setField(f.key, e.target.value)}
+            className="w-full rounded-xl border-2 border-neutral-700 bg-neutral-900 px-3 py-2 font-display font-bold text-parchment focus:border-ember focus:outline-none"
+          />
+        ) : (
+          <select
+            value={value}
+            onChange={(e) => setField(f.key, e.target.value)}
+            className="w-full rounded-xl border-2 border-neutral-700 bg-neutral-900 px-3 py-2 font-display font-bold text-parchment focus:border-ember focus:outline-none"
+          >
+            {!fieldOptions.includes(value) && value && (
+              <option value={value}>{value}</option>
+            )}
+            {fieldOptions.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </select>
+        )}
+      </label>
+    );
   }
 
   return (
@@ -56,19 +136,7 @@ export function CharacterEditor({
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {CORE_FIELDS.map((f) => (
-          <label key={f.key} className="block">
-            <span className="mb-1 block text-xs font-bold uppercase tracking-widest text-neutral-400">
-              {f.label}
-            </span>
-            <input
-              type="text"
-              value={textValue(character, f.key)}
-              onChange={(e) => setField(f.key, e.target.value)}
-              className="w-full rounded-xl border-2 border-neutral-700 bg-neutral-900 px-3 py-2 font-display font-bold text-parchment focus:border-ember focus:outline-none"
-            />
-          </label>
-        ))}
+        {CORE_FIELDS.map((f) => renderField(f))}
         {OPTIONAL_FIELDS.map((f) => (
           <label key={f.key} className="block">
             <span className="mb-1 block text-xs font-bold uppercase tracking-widest text-neutral-400">

@@ -22,6 +22,11 @@ export function characterSummary(character: Character): string {
     "Rules:",
     ...character.rules.map((rule) => `- ${rule}`),
   ];
+  if (character.currentGoal) lines.push("", "Current Goal:", character.currentGoal);
+  if (character.gender) lines.push("", "Gender:", character.gender);
+  if (character.location) lines.push("", "Location:", character.location);
+  if (character.lore) lines.push("", "Lore:", character.lore);
+  if (character.notes) lines.push("", "Notes:", character.notes);
   return lines.join("\n");
 }
 
@@ -42,6 +47,12 @@ export function characterSummaryMarkdown(character: Character): string {
     "**Rules:**",
     ...character.rules.map((rule) => `- ${rule}`),
   ];
+  if (character.currentGoal)
+    lines.push("", `**Current Goal:** ${character.currentGoal}`);
+  if (character.gender) lines.push("", `**Gender:** ${character.gender}`);
+  if (character.location) lines.push("", `**Location:** ${character.location}`);
+  if (character.lore) lines.push("", `**Lore:** ${character.lore}`);
+  if (character.notes) lines.push("", `**Notes:** ${character.notes}`);
   return lines.join("\n");
 }
 
@@ -58,6 +69,7 @@ export function characterSummaryJson(character: Character): string {
     location,
     lore,
     notes,
+    currentGoal,
   } = character;
   const data: Record<string, unknown> = {
     name,
@@ -72,6 +84,7 @@ export function characterSummaryJson(character: Character): string {
   if (location) data.location = location;
   if (lore) data.lore = lore;
   if (notes) data.notes = notes;
+  if (currentGoal) data.currentGoal = currentGoal;
   return JSON.stringify(data, null, 2);
 }
 
@@ -100,6 +113,7 @@ export function parseCharacterJson(input: string): Character {
     location,
     lore,
     notes,
+    currentGoal,
   } = data as Record<string, unknown>;
 
   const isStringField = (value: unknown): value is string =>
@@ -134,5 +148,6 @@ export function parseCharacterJson(input: string): Character {
     location: optionalString(location),
     lore: optionalString(lore),
     notes: optionalString(notes),
+    currentGoal: optionalString(currentGoal),
   };
 }

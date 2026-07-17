@@ -45,6 +45,15 @@ export function CharacterSheet({ character }: CharacterSheetProps) {
 
       <div className="mt-4">
         <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">
+          Current Goal
+        </span>
+        <p className="text-lg text-parchment">
+          {character.currentGoal || "—"}
+        </p>
+      </div>
+
+      <div className="mt-4">
+        <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">
           Rules
         </span>
         <ul className="mt-1 min-h-[1.5rem] space-y-1">

@@ -18,6 +18,7 @@ export interface Character {
   location?: string;
   lore?: string;
   notes?: string;
+  currentGoal?: string;
 }
 
 export type FieldKey =

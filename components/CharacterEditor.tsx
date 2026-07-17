@@ -87,6 +87,19 @@ export function CharacterEditor({
 
       <label className="mt-4 block">
         <span className="mb-1 block text-xs font-bold uppercase tracking-widest text-neutral-400">
+          Current Goal
+        </span>
+        <textarea
+          value={textValue(character, "currentGoal")}
+          onChange={(e) => setField("currentGoal", e.target.value)}
+          rows={1}
+          placeholder="What is this character working toward right now?"
+          className="w-full rounded-xl border-2 border-neutral-700 bg-neutral-900 px-3 py-2 text-parchment placeholder:text-neutral-600 focus:border-ember focus:outline-none"
+        />
+      </label>
+
+      <label className="mt-4 block">
+        <span className="mb-1 block text-xs font-bold uppercase tracking-widest text-neutral-400">
           Lore
         </span>
         <textarea

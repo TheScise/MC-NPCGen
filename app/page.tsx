@@ -175,7 +175,7 @@ export default function ControlPanel() {
               type="button"
               onClick={rollEntireCharacter}
               disabled={!!revealStatus}
-              className="rounded-2xl bg-ember px-8 py-4 text-lg font-black uppercase tracking-widest text-neutral-900 shadow-lg transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-2xl bg-ember px-8 py-4 text-lg font-black uppercase tracking-widest text-white shadow-lg transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-60"
             >
               🎲 Roll Entire Character
             </button>

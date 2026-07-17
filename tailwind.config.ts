@@ -11,8 +11,8 @@ const config: Config = {
         display: ["var(--font-display)"],
       },
       colors: {
-        parchment: "#f1e6c8",
-        ember: "#e0a458",
+        parchment: "#ffffff",
+        ember: "#8b5cf6",
       },
     },
   },

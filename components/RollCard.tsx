@@ -108,7 +108,7 @@ export function RollCard({
         type="button"
         onClick={onRoll}
         disabled={locked || disabled}
-        className="w-full rounded-xl bg-ember/90 px-4 py-2 text-sm font-bold uppercase tracking-wide text-neutral-900 transition hover:bg-ember disabled:cursor-not-allowed disabled:bg-neutral-700 disabled:text-neutral-400"
+        className="w-full rounded-xl bg-ember/90 px-4 py-2 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-ember disabled:cursor-not-allowed disabled:bg-neutral-700 disabled:text-neutral-400"
       >
         🎲 Roll
       </button>

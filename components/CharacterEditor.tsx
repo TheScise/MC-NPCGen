@@ -114,7 +114,7 @@ export function CharacterEditor({
       <button
         type="button"
         onClick={onSave}
-        className="mt-5 w-full rounded-xl bg-ember/90 px-4 py-3 text-sm font-black uppercase tracking-widest text-neutral-900 transition hover:bg-ember"
+        className="mt-5 w-full rounded-xl bg-ember/90 px-4 py-3 text-sm font-black uppercase tracking-widest text-white transition hover:bg-ember"
       >
         {justSaved ? "✅ Saved!" : "💾 Save Character"}
       </button>

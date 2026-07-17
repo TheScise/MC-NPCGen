@@ -8,7 +8,7 @@ import { RollCard, SPIN_DURATION_MS } from "@/components/RollCard";
 import { RulesPanel } from "@/components/RulesPanel";
 import {
   emptyCharacter,
-  fieldOptions,
+  getFieldOptions,
   rollField,
   rulesFor,
 } from "@/lib/generate";
@@ -92,10 +92,21 @@ export default function ControlPanel() {
     });
     const updated: Character = { ...character, ...newValues } as Character;
     updated.rules = rulesFor(updated.className, updated.flawName);
-    setCharacter(updated);
 
+    const clearedValues: Partial<Character> = {};
+    unlockedFields.forEach((f) => {
+      (clearedValues as Record<string, string>)[f.key] = "";
+    });
+    const cleared: Character = { ...character, ...clearedValues } as Character;
+    cleared.rules = rulesFor(cleared.className, cleared.flawName);
+    setCharacter(cleared);
+
+    let revealed: Character = cleared;
     unlockedFields.forEach((f, index) => {
       setTimeout(() => {
+        revealed = { ...revealed, [f.key]: updated[f.key] } as Character;
+        revealed.rules = rulesFor(revealed.className, revealed.flawName);
+        setCharacter(revealed);
         setSpinTokens((prev) => ({ ...prev, [f.key]: prev[f.key] + 1 }));
         setRevealStatus(`${f.label}: ${updated[f.key]}`);
       }, index * STAGGER_MS);
@@ -148,6 +159,7 @@ export default function ControlPanel() {
   }
 
   const isEmpty = character.name === "";
+  const fieldOptions = getFieldOptions();
 
   return (
     <main className="relative mx-auto flex min-h-screen max-w-5xl flex-col gap-6 bg-neutral-950 px-6 py-10">
@@ -205,6 +217,13 @@ export default function ControlPanel() {
           className="rounded-lg border-2 border-neutral-700 bg-neutral-900 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-parchment transition hover:border-ember hover:text-ember"
         >
           📚 Archive
+        </button>
+        <button
+          type="button"
+          onClick={() => router.push("/settings")}
+          className="rounded-lg border-2 border-neutral-700 bg-neutral-900 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-parchment transition hover:border-ember hover:text-ember"
+        >
+          ⚙️ Libraries
         </button>
       </div>
 

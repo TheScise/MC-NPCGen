@@ -166,7 +166,41 @@ export default function SettingsPage() {
       </div>
 
       <section className="rounded-2xl border-2 border-ember/60 bg-neutral-950/80 p-6 shadow-lg">
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 border-b border-neutral-800 pb-5">
+          <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">
+            Add New
+          </span>
+          <input
+            type="text"
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            placeholder={
+              ruleCategory ? "e.g. Dragon Accountant" : "e.g. Clockwork Goblin"
+            }
+            className="w-full rounded-xl border-2 border-neutral-700 bg-neutral-900 px-3 py-2 text-parchment placeholder:text-neutral-600 focus:border-ember focus:outline-none"
+          />
+          {ruleCategory && (
+            <textarea
+              value={newRules}
+              onChange={(e) => setNewRules(e.target.value)}
+              rows={3}
+              placeholder={
+                "One rule per line, e.g.\nCannot resist cheese\nHide cheese in every chest you find"
+              }
+              className="w-full rounded-xl border-2 border-neutral-700 bg-neutral-900 px-3 py-2 text-parchment placeholder:text-neutral-600 focus:border-ember focus:outline-none"
+            />
+          )}
+          <button
+            type="button"
+            onClick={handleAdd}
+            disabled={!newName.trim()}
+            className="self-start rounded-xl bg-ember/90 px-5 py-2 text-sm font-black uppercase tracking-wide text-white transition hover:bg-ember disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            + Add
+          </button>
+        </div>
+
+        <div className="mt-6 flex flex-col gap-3">
           {listCategory && listEntries.length === 0 && (
             <p className="text-center text-sm font-bold uppercase tracking-widest text-neutral-500">
               Nothing here yet.
@@ -237,40 +271,6 @@ export default function SettingsPage() {
                 )}
               </div>
             ))}
-        </div>
-
-        <div className="mt-6 flex flex-col gap-3 border-t border-neutral-800 pt-5">
-          <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">
-            Add New
-          </span>
-          <input
-            type="text"
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            placeholder={
-              ruleCategory ? "e.g. Dragon Accountant" : "e.g. Clockwork Goblin"
-            }
-            className="w-full rounded-xl border-2 border-neutral-700 bg-neutral-900 px-3 py-2 text-parchment placeholder:text-neutral-600 focus:border-ember focus:outline-none"
-          />
-          {ruleCategory && (
-            <textarea
-              value={newRules}
-              onChange={(e) => setNewRules(e.target.value)}
-              rows={3}
-              placeholder={
-                "One rule per line, e.g.\nCannot resist cheese\nHide cheese in every chest you find"
-              }
-              className="w-full rounded-xl border-2 border-neutral-700 bg-neutral-900 px-3 py-2 text-parchment placeholder:text-neutral-600 focus:border-ember focus:outline-none"
-            />
-          )}
-          <button
-            type="button"
-            onClick={handleAdd}
-            disabled={!newName.trim()}
-            className="self-start rounded-xl bg-ember/90 px-5 py-2 text-sm font-black uppercase tracking-wide text-white transition hover:bg-ember disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            + Add
-          </button>
         </div>
       </section>
     </main>

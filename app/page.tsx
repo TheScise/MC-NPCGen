@@ -1,22 +1,24 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CharacterEditor } from "@/components/CharacterEditor";
 import { RollCard, SPIN_DURATION_MS } from "@/components/RollCard";
 import { RulesPanel } from "@/components/RulesPanel";
-import { SavedCharacters } from "@/components/SavedCharacters";
 import {
   emptyCharacter,
   fieldOptions,
   rollField,
   rulesFor,
 } from "@/lib/generate";
-import { characterSummary } from "@/lib/summary";
+import {
+  characterSummary,
+  characterSummaryJson,
+  characterSummaryMarkdown,
+} from "@/lib/summary";
 import {
   defaultLocks,
-  deleteCharacter,
-  getCharacters,
   loadLocks,
   saveCharacter as saveCharacterToArchive,
   saveLocks,
@@ -37,6 +39,7 @@ const FIELD_ORDER: { key: FieldKey; label: string }[] = [
 const STAGGER_MS = 350;
 
 export default function ControlPanel() {
+  const router = useRouter();
   const [character, setCharacter] = usePublishedCharacter(() => emptyCharacter);
   const [locks, setLocks] = useState<LockState>(defaultLocks);
   const [spinTokens, setSpinTokens] = useState<Record<FieldKey, number>>({
@@ -48,15 +51,14 @@ export default function ControlPanel() {
     quest: 0,
   });
   const [revealStatus, setRevealStatus] = useState<string | null>(null);
-  const [copyLabel, setCopyLabel] = useState("Copy Character Summary");
+  const [copyLabel, setCopyLabel] = useState("Copy Character");
+  const [copyMenuOpen, setCopyMenuOpen] = useState(false);
   const [mode, setMode] = useState<"roll" | "edit">("roll");
-  const [savedCharacters, setSavedCharacters] = useState<Character[]>([]);
   const [justSaved, setJustSaved] = useState(false);
   const [savedAsName, setSavedAsName] = useState<string | null>(null);
 
   useEffect(() => {
     setLocks(loadLocks());
-    setSavedCharacters(getCharacters());
   }, []);
 
   useEffect(() => {
@@ -105,11 +107,18 @@ export default function ControlPanel() {
     setTimeout(() => setRevealStatus(null), totalDelay + 1600);
   }
 
-  async function copySummary() {
+  async function copySummary(format: "text" | "markdown" | "json") {
     if (!character) return;
-    await navigator.clipboard.writeText(characterSummary(character));
+    const content =
+      format === "markdown"
+        ? characterSummaryMarkdown(character)
+        : format === "json"
+        ? characterSummaryJson(character)
+        : characterSummary(character);
+    await navigator.clipboard.writeText(content);
+    setCopyMenuOpen(false);
     setCopyLabel("Copied!");
-    setTimeout(() => setCopyLabel("Copy Character Summary"), 1500);
+    setTimeout(() => setCopyLabel("Copy Character"), 1500);
   }
 
   function clearCharacter() {
@@ -127,20 +136,8 @@ export default function ControlPanel() {
       : saveCharacterToArchive({ ...character, id: undefined });
     setCharacter(saved);
     setSavedAsName(saved.name);
-    setSavedCharacters(getCharacters());
     setJustSaved(true);
     setTimeout(() => setJustSaved(false), 1500);
-  }
-
-  function loadSavedCharacter(saved: Character) {
-    setCharacter(saved);
-    setSavedAsName(saved.name);
-    setMode("edit");
-  }
-
-  function deleteSavedCharacter(id: string) {
-    deleteCharacter(id);
-    setSavedCharacters(getCharacters());
   }
 
   if (!character) {
@@ -156,7 +153,64 @@ export default function ControlPanel() {
   const isEmpty = character.name === "";
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 bg-neutral-950 px-6 py-10">
+    <main className="relative mx-auto flex min-h-screen max-w-5xl flex-col gap-6 bg-neutral-950 px-6 py-10">
+      <div className="absolute right-4 top-4 flex gap-2">
+        <div
+          className="relative"
+          onMouseEnter={() => !isEmpty && setCopyMenuOpen(true)}
+          onMouseLeave={() => setCopyMenuOpen(false)}
+        >
+          <button
+            type="button"
+            onClick={() => copySummary("text")}
+            disabled={isEmpty}
+            className="rounded-lg border-2 border-neutral-700 bg-neutral-900 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-parchment transition hover:border-ember hover:text-ember disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            📋 {copyLabel}
+          </button>
+          <AnimatePresence>
+            {copyMenuOpen && !isEmpty && (
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.15 }}
+                className="absolute right-0 top-full z-10 mt-1 flex w-32 flex-col overflow-hidden rounded-lg border-2 border-neutral-700 bg-neutral-900 shadow-lg"
+              >
+                <button
+                  type="button"
+                  onClick={() => copySummary("text")}
+                  className="px-3 py-1.5 text-left text-[11px] font-bold uppercase tracking-wide text-parchment transition hover:bg-neutral-800 hover:text-ember"
+                >
+                  Plain Text
+                </button>
+                <button
+                  type="button"
+                  onClick={() => copySummary("markdown")}
+                  className="px-3 py-1.5 text-left text-[11px] font-bold uppercase tracking-wide text-parchment transition hover:bg-neutral-800 hover:text-ember"
+                >
+                  Markdown
+                </button>
+                <button
+                  type="button"
+                  onClick={() => copySummary("json")}
+                  className="px-3 py-1.5 text-left text-[11px] font-bold uppercase tracking-wide text-parchment transition hover:bg-neutral-800 hover:text-ember"
+                >
+                  JSON
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+        <button
+          type="button"
+          onClick={() => router.push("/archive")}
+          className="rounded-lg border-2 border-neutral-700 bg-neutral-900 px-3 py-1.5 text-[11px] font-bold uppercase tracking-wide text-parchment transition hover:border-ember hover:text-ember"
+        >
+          📚 Archive
+        </button>
+      </div>
+
       <header className="flex flex-col items-center text-center">
         <img
           src="/npcmc_logo.png"
@@ -227,11 +281,11 @@ export default function ControlPanel() {
             </button>
             <button
               type="button"
-              onClick={copySummary}
+              onClick={saveCharacterToSheet}
               disabled={isEmpty}
               className="rounded-xl border-2 border-neutral-700 bg-neutral-900 px-6 py-3 text-sm font-bold uppercase tracking-wide text-parchment transition hover:border-ember hover:text-ember disabled:cursor-not-allowed disabled:opacity-50"
             >
-              📋 {copyLabel}
+              {justSaved ? "✅ Saved!" : "💾 Save Character"}
             </button>
             <button
               type="button"
@@ -251,11 +305,6 @@ export default function ControlPanel() {
             onSave={saveCharacterToSheet}
             onClose={() => setMode("roll")}
             justSaved={justSaved}
-          />
-          <SavedCharacters
-            characters={savedCharacters}
-            onLoad={loadSavedCharacter}
-            onDelete={deleteSavedCharacter}
           />
         </div>
       )}

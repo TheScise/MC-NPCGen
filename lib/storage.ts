@@ -43,6 +43,11 @@ function saveLiveCharacter(character: Character) {
   channel?.close();
 }
 
+/** Publishes a character as the live/on-air character, syncing the control panel + overlay. */
+export function publishCharacter(character: Character) {
+  saveLiveCharacter(character);
+}
+
 function generateId(): string {
   if (typeof window !== "undefined" && "crypto" in window && "randomUUID" in window.crypto) {
     return window.crypto.randomUUID();

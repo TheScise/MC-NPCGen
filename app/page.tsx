@@ -305,6 +305,14 @@ export default function ControlPanel() {
           />
         </div>
       )}
+
+      <button
+        type="button"
+        onClick={() => window.open("/overlay", "_blank", "noopener,noreferrer")}
+        className="fixed bottom-4 right-4 rounded-full border-2 border-neutral-700 bg-neutral-900 px-4 py-2 text-xs font-bold uppercase tracking-wide text-parchment shadow-lg transition hover:border-ember hover:text-ember"
+      >
+        🖥️ Open Overlay
+      </button>
     </main>
   );
 }

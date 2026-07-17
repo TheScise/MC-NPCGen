@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Character } from "@/lib/types";
 
 interface CharacterSheetProps {
@@ -13,9 +14,20 @@ export function CharacterSheet({ character }: CharacterSheetProps) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="w-[420px] rounded-3xl border-2 border-ember/60 bg-neutral-950/80 p-6 shadow-2xl backdrop-blur-sm"
+      className="relative w-[420px] rounded-3xl border-2 border-ember/60 bg-neutral-950/80 p-6 shadow-2xl backdrop-blur-sm"
     >
-      <h1 className="font-display text-4xl font-extrabold uppercase tracking-wide text-parchment">
+      <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/4">
+        <Image
+          src="/npcmc_logo.png"
+          alt="NPC MC logo"
+          width={110}
+          height={61}
+          className="drop-shadow-lg"
+          priority
+        />
+      </div>
+
+      <h1 className="mt-10 font-display text-4xl font-extrabold uppercase tracking-wide text-parchment">
         {character.name || "—"}
       </h1>
 

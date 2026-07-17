@@ -1,0 +1,389 @@
+Prompt 1 — Add Manual Editing + Character Persistence
+# Feature Request: Manual Editing Mode + Character Persistence
+
+The NPC generator is currently focused on random slot-machine character creation.
+
+I want to add a second workflow:
+
+1. Live random generation (existing)
+2. Manual NPC creation/editing (new)
+
+Do not remove or redesign the current slot machine experience.
+
+The random generation flow should remain the default and most entertaining path.
+
+---
+
+## Goals
+
+Allow the user to manually adjust any generated NPC before saving or using it.
+
+The user should be able to:
+
+- Roll a character
+- Adjust details manually
+- Save the final version
+
+---
+
+# Character Editor
+
+Add an "Edit Character" mode.
+
+This should allow editing:
+
+- Name
+- Race
+- Nationality
+- Class
+- Flaw
+- Quest
+
+Optional fields:
+
+- Gender
+- Location
+- Lore
+- Notes
+
+The editor should use the same character state as the random generator.
+
+Example workflow:
+
+1. Roll NPC
+
+Harold
+Dwarf
+Scottish
+Potato Farmer
+Hates Moon
+
+2. Click Edit
+
+Change:
+
+Name:
+Harold → Gregor
+
+Quest:
+Defeat Lich → Find Lost Crown
+
+3. Save
+
+---
+
+# Character Data Model
+
+Extend the character model.
+
+Current:
+
+{
+name,
+race,
+class,
+flaw,
+quest
+}
+
+Add:
+
+{
+id,
+createdAt,
+updatedAt,
+lore,
+location,
+notes
+}
+
+Use generated IDs.
+
+Do not add a database.
+
+---
+
+# Persistence
+
+Create a simple storage layer.
+
+Use localStorage initially.
+
+Create a reusable utility:
+
+lib/storage.ts
+
+Responsibilities:
+
+- saveCharacter()
+- loadCharacter()
+- updateCharacter()
+- deleteCharacter()
+- getCharacters()
+
+Keep storage logic separate from UI.
+
+---
+
+# UI Requirements
+
+Maintain the existing dark RPG aesthetic.
+
+Do not make this look like an admin dashboard.
+
+The edit interface should feel like a character sheet.
+
+Example:
+
+====================
+
+HAROLD
+
+Race:
+[Dwarf]
+
+Class:
+[Potato Farmer]
+
+Flaw:
+[Hates the Moon]
+
+Lore:
+[Text area]
+
+[Save Character]
+
+====================
+
+---
+
+# Testing
+
+Verify:
+
+- Existing random roller still works
+- Overlay still updates
+- Manual changes update overlay
+- Refreshing the page preserves saved characters
+
+Keep the implementation simple.
+Prompt 2 — Add NPC Archive
+
+After that works:
+
+# Feature Request: NPC Archive
+
+Add an NPC library to store and retrieve created characters.
+
+This should build on the existing character persistence system.
+
+---
+
+## New Feature
+
+Add an NPC Archive page:
+
+Route:
+
+/archive
+
+Purpose:
+
+Allow the creator to view previously created NPCs.
+
+---
+
+# Archive UI
+
+Display saved NPC cards:
+
+Example:
+
+--------------------
+
+Harold
+
+Dwarf Potato Farmer
+
+Flaw:
+Hates the Moon
+
+[Load]
+[Delete]
+
+--------------------
+
+Each card should show:
+
+- Name
+- Race
+- Class
+- Flaw
+- Creation date
+
+---
+
+# Loading
+
+Clicking Load should:
+
+- Restore the character
+- Return user to the main creator page
+- Populate the character sheet
+- Update the OBS overlay
+
+---
+
+# Delete
+
+Allow deletion with confirmation.
+
+---
+
+# Storage
+
+Continue using localStorage.
+
+Do not introduce:
+
+- Database
+- Authentication
+- API routes
+
+---
+
+# Future Compatibility
+
+Structure the code so this could later migrate to JSON files or a database.
+
+Do not build that now.
+
+---
+
+# Keep Existing Features
+
+Do not break:
+
+- Slot machine rolls
+- Locks
+- Reveal animation
+- Overlay
+Prompt 3 — Add Custom Libraries
+
+This one is the most "campaign manager" feature.
+
+# Feature Request: Custom NPC Option Libraries
+
+Add editable libraries for NPC generation options.
+
+The goal is allowing the creator to expand the world over time.
+
+Examples:
+
+New class:
+"Dragon Accountant"
+
+New flaw:
+"Cannot Resist Cheese"
+
+New race:
+"Clockwork Goblin"
+
+---
+
+# Editable Data Categories
+
+Support:
+
+- Names
+- Races
+- Nationalities
+- Classes
+- Flaws
+- Quests
+
+---
+
+# Management UI
+
+Add:
+
+/settings
+
+or a tab in the control panel.
+
+Display categories:
+
+Classes
+
+Potato Farmer
+King
+Rogue
+
+[+ Add]
+[Delete]
+
+---
+
+# Behaviour
+
+When options are added:
+
+- They immediately become available in random rolls
+- Existing saved NPCs are unaffected
+
+---
+
+# Class and Flaw Rules
+
+Maintain the existing rule system.
+
+Classes and flaws should support:
+
+Example:
+
+{
+name:
+"Potato Farmer",
+
+rules:[
+"Prioritise farming",
+"Carry potatoes"
+]
+}
+
+---
+
+# Storage
+
+Store custom options in localStorage.
+
+Keep default options separate.
+
+Example:
+
+data/defaultClasses.json
+
+User additions:
+
+localStorage
+
+---
+
+# Important
+
+Do not change the random generation UX.
+
+The slot-machine experience remains the main stream feature.
+
+This only expands the available content.
+My order recommendation:
+Manual editing (because your friend immediately wants it)
+Archive (because recurring NPCs are the heart of the SMP idea)
+Custom libraries (because it becomes useful once he has 20+ episodes)
+
+The archive is actually the feature I'd be most excited about. The moment he can say:
+
+"This is Harold. He was the potato farmer from episode 3."
+
+and pull him up instantly, the project stops being a generator and starts becoming a world-building tool.

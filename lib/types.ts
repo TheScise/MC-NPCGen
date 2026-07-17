@@ -11,6 +11,13 @@ export interface Character {
   flawName: string;
   quest: string;
   rules: string[];
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  gender?: string;
+  location?: string;
+  lore?: string;
+  notes?: string;
 }
 
 export type FieldKey =

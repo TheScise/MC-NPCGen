@@ -6,6 +6,7 @@ import { Character, LockState } from "./types";
 const STORAGE_KEY = "mc-npcgen-character";
 const LOCK_KEY = "mc-npcgen-locks";
 const CHANNEL_NAME = "mc-npcgen";
+const ARCHIVE_KEY = "mc-npcgen-archive";
 
 export const defaultLocks: LockState = {
   name: false,
@@ -23,7 +24,7 @@ function getChannel(): BroadcastChannel | null {
   return new BroadcastChannel(CHANNEL_NAME);
 }
 
-export function loadCharacter(): Character | null {
+function loadLiveCharacter(): Character | null {
   if (typeof window === "undefined") return null;
   const raw = window.localStorage.getItem(STORAGE_KEY);
   if (!raw) return null;
@@ -34,12 +35,84 @@ export function loadCharacter(): Character | null {
   }
 }
 
-export function saveCharacter(character: Character) {
+function saveLiveCharacter(character: Character) {
   if (typeof window === "undefined") return;
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(character));
   const channel = getChannel();
   channel?.postMessage({ type: "character", character });
   channel?.close();
+}
+
+function generateId(): string {
+  if (typeof window !== "undefined" && "crypto" in window && "randomUUID" in window.crypto) {
+    return window.crypto.randomUUID();
+  }
+  return `npc-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
+function loadArchive(): Character[] {
+  if (typeof window === "undefined") return [];
+  const raw = window.localStorage.getItem(ARCHIVE_KEY);
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw) as Character[];
+  } catch {
+    return [];
+  }
+}
+
+function persistArchive(characters: Character[]) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(ARCHIVE_KEY, JSON.stringify(characters));
+}
+
+/** All saved NPCs, most recently updated first. */
+export function getCharacters(): Character[] {
+  return loadArchive().sort((a, b) =>
+    (b.updatedAt ?? "").localeCompare(a.updatedAt ?? "")
+  );
+}
+
+/** A single saved NPC by id. */
+export function loadCharacter(id: string): Character | null {
+  return loadArchive().find((c) => c.id === id) ?? null;
+}
+
+/** Saves a new NPC to the archive, assigning an id and timestamps. */
+export function saveCharacter(character: Character): Character {
+  const now = new Date().toISOString();
+  const saved: Character = {
+    ...character,
+    id: character.id ?? generateId(),
+    createdAt: character.createdAt ?? now,
+    updatedAt: now,
+  };
+  const archive = loadArchive().filter((c) => c.id !== saved.id);
+  persistArchive([...archive, saved]);
+  return saved;
+}
+
+/** Updates an existing saved NPC by id. Returns null if it doesn't exist. */
+export function updateCharacter(
+  id: string,
+  updates: Partial<Character>
+): Character | null {
+  const archive = loadArchive();
+  const existing = archive.find((c) => c.id === id);
+  if (!existing) return null;
+  const updated: Character = {
+    ...existing,
+    ...updates,
+    id,
+    updatedAt: new Date().toISOString(),
+  };
+  persistArchive(archive.map((c) => (c.id === id ? updated : c)));
+  return updated;
+}
+
+/** Removes a saved NPC from the archive. */
+export function deleteCharacter(id: string) {
+  persistArchive(loadArchive().filter((c) => c.id !== id));
 }
 
 export function loadLocks(): LockState {
@@ -67,20 +140,20 @@ export function usePublishedCharacter(createInitial: () => Character) {
   const [character, setCharacterState] = useState<Character | null>(null);
 
   useEffect(() => {
-    const stored = loadCharacter();
+    const stored = loadLiveCharacter();
     if (stored) {
       setCharacterState(stored);
     } else {
       const generated = createInitial();
       setCharacterState(generated);
-      saveCharacter(generated);
+      saveLiveCharacter(generated);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setCharacter = useCallback((next: Character) => {
     setCharacterState(next);
-    saveCharacter(next);
+    saveLiveCharacter(next);
   }, []);
 
   return [character, setCharacter] as const;
@@ -91,7 +164,7 @@ export function useSyncedCharacter(): Character | null {
   const [character, setCharacter] = useState<Character | null>(null);
 
   useEffect(() => {
-    setCharacter(loadCharacter());
+    setCharacter(loadLiveCharacter());
     const channel = getChannel();
     const onMessage = (event: MessageEvent) => {
       if (event.data?.type === "character") {

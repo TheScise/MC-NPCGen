@@ -55,7 +55,6 @@ export default function ControlPanel() {
   const [copyMenuOpen, setCopyMenuOpen] = useState(false);
   const [mode, setMode] = useState<"roll" | "edit">("roll");
   const [justSaved, setJustSaved] = useState(false);
-  const [savedAsName, setSavedAsName] = useState<string | null>(null);
 
   useEffect(() => {
     setLocks(loadLocks());
@@ -125,17 +124,15 @@ export default function ControlPanel() {
     setRevealStatus(null);
     setLocks(defaultLocks);
     setCharacter(emptyCharacter);
-    setSavedAsName(null);
   }
 
   function saveCharacterToSheet() {
     if (!character) return;
-    const isSameCharacter = !!character.id && character.name === savedAsName;
-    const saved = isSameCharacter
-      ? updateCharacter(character.id!, character) ?? saveCharacterToArchive({ ...character, id: undefined })
+    const saved = character.id
+      ? updateCharacter(character.id, character) ??
+        saveCharacterToArchive({ ...character, id: undefined })
       : saveCharacterToArchive({ ...character, id: undefined });
     setCharacter(saved);
-    setSavedAsName(saved.name);
     setJustSaved(true);
     setTimeout(() => setJustSaved(false), 1500);
   }

@@ -140,19 +140,16 @@ export function saveLocks(locks: LockState) {
  * For the control panel: local character state that persists + broadcasts on every change.
  * Starts as `null` so the server-rendered markup and the first client render match exactly
  * (localStorage/randomness are only read after mount, avoiding a hydration mismatch).
+ * Always resets to `createInitial()` on mount — the control panel starts fresh on every
+ * page load rather than restoring the last rolled/saved character.
  */
 export function usePublishedCharacter(createInitial: () => Character) {
   const [character, setCharacterState] = useState<Character | null>(null);
 
   useEffect(() => {
-    const stored = loadLiveCharacter();
-    if (stored) {
-      setCharacterState(stored);
-    } else {
-      const generated = createInitial();
-      setCharacterState(generated);
-      saveLiveCharacter(generated);
-    }
+    const generated = createInitial();
+    setCharacterState(generated);
+    saveLiveCharacter(generated);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
